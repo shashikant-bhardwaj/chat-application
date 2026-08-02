@@ -6,12 +6,20 @@ const userSchema = new Schema(
     {
        fullName: {
         type: String,
-        required: true
+        required: true,
+        trim: true,
+        index: true
+       },
+       email: {
+         type: String,
+         required: true
        },
        username: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        lowercase: true,
+        index: true
        },
        password: {
         type: String,
@@ -25,6 +33,9 @@ const userSchema = new Schema(
         type: String,
         enum: ["male", "female"],
         required: true
+       },
+       refreshToken:{
+        type: String
        }
     }, 
     {timestamps: true})
@@ -40,7 +51,7 @@ userSchema.methods.isPasswordCorrect = async function(password){
     return await bcrypt.compare(password, this.password)
 }
 
-userSchema.methods.generateAcessToken = async function() {
+userSchema.methods.generateAccessToken = function() {
    
     return jwt.sign(
         {
@@ -57,7 +68,7 @@ userSchema.methods.generateAcessToken = async function() {
     
 }
 
-userSchema.methods.generatRefreshToken = async function() {
+userSchema.methods.generateRefreshToken = function() {
    
     return jwt.sign(
         {

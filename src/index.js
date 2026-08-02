@@ -4,8 +4,10 @@ import { connectDB  } from "./db/index.js"
 import { app } from "./app.js";
 
 dotenv.config({
-    path: "./env"
+    path: "./.env"
 })
+console.log("PORT:", process.env.PORT);
+console.log("ACCESS_TOKEN_SECRET:", process.env.ACCESS_TOKEN_SECRET);
 
 connectDB()
 .then( () => {
