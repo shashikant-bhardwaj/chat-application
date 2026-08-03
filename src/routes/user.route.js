@@ -12,6 +12,8 @@ const router = Router()
 
 router.route("/register").post(userRegister)
 router.route("/login").post(login)
+
+//secure routing
 router.route("/logout").post(verifyJWT, logout)
 router.route("/other-users").get(verifyJWT, getOtherUsers )
 

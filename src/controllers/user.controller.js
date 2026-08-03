@@ -146,7 +146,7 @@ const login = asyncHandler(async (req, res) => {
 const logout = asyncHandler(async (req, res) => {
 
     const user = await User.findByIdAndUpdate(
-        req.user._id,
+        req.user?._id,
         {
             $unset: {
                 refreshToken: 1
@@ -179,7 +179,7 @@ const logout = asyncHandler(async (req, res) => {
 
 //getAllOtherUsers controller
 const getOtherUsers = asyncHandler(async (req, res) => {
-    const allOtherLoggedInUser = await User.find({ _id: { $ne: req.user._id } }).select("-password -refreshToken")
+    const allOtherLoggedInUser = await User.find({ _id: { $ne: req.user?._id } }).select("-password -refreshToken")
 
     return res
         .status(200)
@@ -190,6 +190,8 @@ const getOtherUsers = asyncHandler(async (req, res) => {
                 allOtherLoggedInUser.length ? "users fetched successfully" : "no other user exist")
         )
 })
+
+
 
 
 
