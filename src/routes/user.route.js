@@ -3,7 +3,8 @@ import { verifyJWT } from "../middlewares/auth.middleware.js"
 import {
     userRegister,
     login,
-    logout
+    logout,
+    getOtherUsers
      } from "../controllers/user.controller.js"
 
 
@@ -12,6 +13,7 @@ const router = Router()
 router.route("/register").post(userRegister)
 router.route("/login").post(login)
 router.route("/logout").post(verifyJWT, logout)
+router.route("/other-users").get(verifyJWT, getOtherUsers )
 
 
 export default router

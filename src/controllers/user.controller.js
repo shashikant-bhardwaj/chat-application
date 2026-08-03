@@ -177,6 +177,20 @@ const logout = asyncHandler(async (req, res) => {
 
 })
 
+//getAllOtherUsers controller
+const getOtherUsers = asyncHandler(async (req, res) => {
+    const allOtherLoggedInUser = await User.find({ _id: { $ne: req.user._id } }).select("-password -refreshToken")
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                allOtherLoggedInUser,
+                allOtherLoggedInUser.length ? "users fetched successfully" : "no other user exist")
+        )
+})
+
 
 
 
@@ -199,7 +213,8 @@ const logout = asyncHandler(async (req, res) => {
 export {
     userRegister,
     login,
-    logout
+    logout,
+    getOtherUsers
 }
 
 
