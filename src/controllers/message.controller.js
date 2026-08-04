@@ -123,6 +123,39 @@ const getMessage = asyncHandler(async(req, res) => {
 
 })
 
+// markMessageAsSeen
+
+const markMessageAsSeen = asyncHandler(async(req, res) => {
+    const senderId = req.params._id
+    const receiverId = req.user._id
+    console.log(senderId)
+    console.log(receiverId)
+
+    const result = await Message.updateMany(
+        {
+            senderId,
+            receiverId,
+            isSeen: false
+        },
+        {
+            $set: {
+                isSeen: true
+            }
+        }
+    )
+
+    return res
+    .status(200)
+    .json(
+       new ApiResponse(
+        200,
+        {modifiedCount: result.modifiedCount},
+        "message marked as seen"
+       )
+    )
+})
+
+
 
 
 
@@ -140,6 +173,7 @@ const getMessage = asyncHandler(async(req, res) => {
 
 export {
     sendMessage,
-    getMessage
+    getMessage,
+    markMessageAsSeen
 
 }
