@@ -35,20 +35,23 @@ const sendMessage = asyncHandler(async (req, res) => {
 
     //find conversation if doesn't exist create it
 
-    // const conversation = await Conversation.findOneAndUpdate(
-    //     {
-    //         participants: { $all: [senderId, receiverId] }
-    //     },
-    //     {
-    //         $setOnInsert: {
-    //             participants: [senderId, receiverId]
-    //         }
-    //     },
-    //     {
-    //         upsert: true,
-    //         new: true
-    //     }
-    // )
+//    const conversationKey = [senderId.toString(), receiverId.toString()].sort().join("_")
+
+//     const conversation = await Conversation.findOneAndUpdate(
+//         {
+//             conversationKey
+//         },
+//         {
+//             $setOnInsert: {
+//                   conversationKey,
+//                 participants: [senderId, receiverId]
+//             }
+//         },
+//         {
+//             upsert: true,
+//             new: true
+//         }
+//     )
 
     let conversation = await Conversation.findOne({
         participants: {
@@ -94,8 +97,49 @@ const sendMessage = asyncHandler(async (req, res) => {
 })
 
 
+// get message
+
+const getMessage = asyncHandler(async(req, res) => {
+    const receiverId = req.params?._id
+    const senderId = req.user?._id
+    
+    const conversation = await Conversation.findOne({
+        participants: {$all: [senderId, receiverId]}
+    }).populate("messages")
+
+    if(!conversation){
+        return new ApiError(404, "conversation of participants doesn't exist")
+    }
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(
+            200,
+            conversation,
+            "messages fetched successfully"
+        )
+    )
+
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export {
     sendMessage,
+    getMessage
 
 }
