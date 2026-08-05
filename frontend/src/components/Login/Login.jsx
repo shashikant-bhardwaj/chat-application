@@ -1,5 +1,7 @@
 import React, {useState} from 'react'
 import { Link } from "react-router-dom"
+import toast from 'react-hot-toast';
+import axios from 'axios';
 
 function Login() {
 
@@ -16,9 +18,26 @@ function Login() {
     }));
   };
 
-  const onSubmitHandler = (e) => {
+  const onSubmitHandler = async(e) => {
     e.preventDefault()
     console.log(user)
+        try {
+      const res = await axios.post("http://localhost:8080/api/v1/users/login", user, {
+        headers: {
+          "Content-Type": "application/json"
+        },
+        withCredentials: true
+      })
+      console.log(res)
+      if(res.data.success){
+        navigate("/")
+      
+      }
+    
+
+    } catch (error) {
+      console.log( error)
+    }
     setUser({
       identifier: "",
       password: "",

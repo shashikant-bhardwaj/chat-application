@@ -86,9 +86,9 @@ const login = asyncHandler(async (req, res) => {
     //generate access and refresh token and send it to user in cookies
     //send res
 
-    const { username, email, password } = req.body
+    const { identifier, password } = req.body
 
-    if (!username && !email) {
+    if (!identifier) {
         throw new ApiError(400, "username or email is required")
     }
 
@@ -98,7 +98,7 @@ const login = asyncHandler(async (req, res) => {
 
     const existedUser = await User.findOne({
         $or: [
-            { username }, { email }
+            { username: identifier }, { email: identifier }
         ]
     })
     if (!existedUser) {
@@ -135,7 +135,7 @@ const login = asyncHandler(async (req, res) => {
                     accessToken,
                     refreshToken
                 },
-                "user logged in successfully"
+                "Logged in successfully"
             )
         )
 
