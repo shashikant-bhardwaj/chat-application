@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { Link } from "react-router-dom"
 import toast from 'react-hot-toast';
 import axios from 'axios';
@@ -18,25 +18,24 @@ function Login() {
     }));
   };
 
-  const onSubmitHandler = async(e) => {
+  const onSubmitHandler = async (e) => {
     e.preventDefault()
     console.log(user)
-        try {
+    try {
       const res = await axios.post("http://localhost:8080/api/v1/users/login", user, {
         headers: {
           "Content-Type": "application/json"
         },
         withCredentials: true
       })
-      console.log(res)
-      if(res.data.success){
+      if (res.data.success) {
         navigate("/")
-      
+        toast.success(res.data.message)
       }
-    
+
 
     } catch (error) {
-      console.log( error)
+      toast.error(error.response.data.message)
     }
     setUser({
       identifier: "",
@@ -53,8 +52,8 @@ function Login() {
             Log In
           </h1>
           <form
-           onSubmit={onSubmitHandler}
-           className="space-y-4">
+            onSubmit={onSubmitHandler}
+            className="space-y-4">
 
             {/* Username or email --> identifier */}
             <div>

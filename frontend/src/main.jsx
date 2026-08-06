@@ -7,6 +7,8 @@ import Signup from './components/Signup/Signup.jsx'
 import Login from './components/Login/Login.jsx'
 import Home from './components/Home/Home.jsx'
 import {Toaster} from "react-hot-toast"
+import { Provider } from "react-redux"
+import { store } from './app/store.js'
 
 const router = createBrowserRouter(
   [
@@ -26,7 +28,9 @@ const router = createBrowserRouter(
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+    <Provider store={store}>
    <RouterProvider router = {router} />
    <Toaster/>
+   </Provider>
   </StrictMode>,
 )

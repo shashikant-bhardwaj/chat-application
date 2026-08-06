@@ -17,3 +17,18 @@ body{
   background-position: center;
   background-repeat: no-repeat;
 }
+
+/* Hide scrollbar for Chrome, Edge, Safari */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for Firefox */
+.hide-scrollbar {
+  scrollbar-width: none;
+}
+
+/* Hide scrollbar for IE & old Edge */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+}

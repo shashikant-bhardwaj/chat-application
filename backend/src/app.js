@@ -26,5 +26,14 @@ app.use("/api/v1/messages", messageRouter)
 
 
 
+app.use((err, req, res, next) => {
+    res.status(err.statusCode).json({
+        success: false,
+        message: err.message
+    });
+});
+
+
+
 
 export { app }
