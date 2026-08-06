@@ -1,4 +1,6 @@
 import React from "react";
+import SendInput from "./sendInput";
+import Messages from "./messages";
 
 function MessageContainer({
   selectedUser,
@@ -51,36 +53,12 @@ function MessageContainer({
 
       {/* Messages */}
 
-      <div className="flex-1 overflow-y-auto p-4 hide-scrollbar">
-
-        <div className="bg-gray-700 text-white rounded-xl p-3 w-fit">
-          Hello 👋
-        </div>
-
-        <div className="bg-blue-600 text-white rounded-xl p-3 w-fit ml-auto mt-3">
-          Hi 😊
-        </div>
-
-      </div>
+        <Messages/>
 
       {/* Input */}
-
-      <div className="border-t border-gray-700 p-3">
-
-        <div className="flex gap-2">
-
-          <input
-            className="flex-1 rounded-full px-4 py-3 bg-white/10 border border-gray-600 text-white outline-none"
-            placeholder="Type a message..."
-          />
-
-          <button className="bg-blue-600 px-5 rounded-full text-white">
-            Send
-          </button>
-
-        </div>
-
-      </div>
+     
+      <SendInput/>
+     
 
     </div>
   );

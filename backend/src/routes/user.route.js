@@ -15,7 +15,7 @@ router.route("/login").post(login)
 
 //secure routing
 router.route("/logout").post(verifyJWT, logout)
-router.route("/other-users").get(verifyJWT, getOtherUsers )
+router.route("/").get(verifyJWT, getOtherUsers )
 
 
 export default router

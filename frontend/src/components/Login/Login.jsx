@@ -1,9 +1,15 @@
 import React, { useState } from 'react'
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import toast from 'react-hot-toast';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { setAuthUser } from '../../features/user/userSlice';
+
 
 function Login() {
+  const navigate = useNavigate()
+
+  const dispatch = useDispatch()
 
   const [user, setUser] = useState({
     identifier: "",
@@ -21,6 +27,7 @@ function Login() {
   const onSubmitHandler = async (e) => {
     e.preventDefault()
     console.log(user)
+    
     try {
       const res = await axios.post("http://localhost:8080/api/v1/users/login", user, {
         headers: {
@@ -31,6 +38,8 @@ function Login() {
       if (res.data.success) {
         navigate("/")
         toast.success(res.data.message)
+        dispatch(setAuthUser(res.data))
+        console.log(res.data)
       }
 
 
