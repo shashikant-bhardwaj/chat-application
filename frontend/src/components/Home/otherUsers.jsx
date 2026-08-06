@@ -3,7 +3,7 @@ import OtherUser from "./otherUser";
 import { useSelector } from "react-redux";
 import useGetOtherUsers from "../../hooks/getOtherUsers/useGetOtherUsers";
 
-function OtherUsers({ selectedUser, setSelectedUser }) {
+function OtherUsers() {
 
   useGetOtherUsers();
 
@@ -17,8 +17,6 @@ function OtherUsers({ selectedUser, setSelectedUser }) {
         <OtherUser
           key={user._id}
           user={user}
-          setSelectedUser={setSelectedUser}
-          selectedUser={selectedUser}
         />
       ))}
     </div>

@@ -3,9 +3,11 @@ import Sidebar from "./Sidebar";
 import MessageContainer from "./MessageContainer";
 import axios from "axios"
 import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 function Home() {
-  const [selectedUser, setSelectedUser] = useState(null);
+  // const [selectedUser, setSelectedUser] = useState(null);
+  const {selectedUser} = useSelector(store => store.user)
   const dispatch = useDispatch();
 
   useEffect( () => {
@@ -28,7 +30,7 @@ function Home() {
         >
           <Sidebar
             selectedUser={selectedUser}
-            setSelectedUser={setSelectedUser}
+           
           />
         </div>
 
@@ -41,7 +43,7 @@ function Home() {
         >
           <MessageContainer
             selectedUser={selectedUser}
-            setSelectedUser={setSelectedUser}
+          
           />
         </div>
 

@@ -7,7 +7,7 @@ import axios from "axios";
 // import { useSelector } from "react-redux";
 
 
-function Sidebar({ selectedUser, setSelectedUser }) {
+function Sidebar() {
 
    const navigate = useNavigate()
   //  const selector = useSelector()
@@ -54,9 +54,7 @@ function Sidebar({ selectedUser, setSelectedUser }) {
       </div>
 
       {/* Users */}
-      <OtherUsers setSelectedUser={setSelectedUser}
-                  selectedUser={selectedUser}
-    />
+      <OtherUsers/>
 
     
 {/* Logged In User + Logout */}

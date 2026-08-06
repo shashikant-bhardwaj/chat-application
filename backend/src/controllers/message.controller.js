@@ -108,7 +108,7 @@ const getMessage = asyncHandler(async(req, res) => {
     }).populate("messages")
 
     if(!conversation){
-        return new ApiError(404, "conversation of participants doesn't exist")
+        throw new ApiError(404, "conversation of participants doesn't exist")
     }
 
     return res
