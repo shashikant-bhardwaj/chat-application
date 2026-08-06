@@ -32,7 +32,7 @@ function MessageContainer({
         </button>
 
         <img
-          src="https://avatar.iran.liara.run/public"
+          src={selectedUser.profilePhoto}
           alt=""
           className="w-12 h-12 rounded-full"
         />
@@ -40,7 +40,7 @@ function MessageContainer({
         <div>
 
           <h2 className="text-white font-semibold">
-            {selectedUser.name}
+            {selectedUser.fullName}
           </h2>
 
           <p className="text-green-400 text-sm">
