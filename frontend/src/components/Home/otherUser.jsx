@@ -1,15 +1,28 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
+import { setSelectedUser } from '../../features/user/userSlice'
+import { useSelector } from 'react-redux'
 
-
-function OtherUser({setSelectedUser, user}) {
-     
+function OtherUser({user}) {
+    //  console.log(selectedUser)
+     const dispatch = useDispatch()
+    //  const selector = useSelector()
+     const {selectedUser} = useSelector(store => store.user)
   
     return (
 
           <div
             // key={user.id}
-            onClick={() => setSelectedUser(user)}
-            className="flex items-center gap-3 p-4 hover:bg-white/10 cursor-pointer transition"
+            onClick={() => dispatch(setSelectedUser(user))}
+            className={`
+  flex items-center gap-3 p-4 cursor-pointer rounded-lg
+  transition-all duration-10
+  ${
+    selectedUser?._id === user._id
+      ? "bg-blue-500/20 shadow-lg shadow-blue-500/40 border border-blue-400"
+      : "hover:bg-white/10"
+  }
+`}
           >
 
             <img

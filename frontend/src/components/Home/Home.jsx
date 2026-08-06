@@ -1,9 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import MessageContainer from "./MessageContainer";
+import axios from "axios"
+import { useDispatch } from "react-redux";
 
 function Home() {
   const [selectedUser, setSelectedUser] = useState(null);
+  const dispatch = useDispatch();
+
+  useEffect( () => {
+    const getCurrentUser = async() => {
+      const res = await axios.post
+    }
+  }, [dispatch])
 
   return (
     <div className="h-screen p-2 sm:p-4">
@@ -18,6 +27,7 @@ function Home() {
           `}
         >
           <Sidebar
+            selectedUser={selectedUser}
             setSelectedUser={setSelectedUser}
           />
         </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from "react-router-dom"
 import toast from 'react-hot-toast';
 import axios from 'axios';
@@ -6,10 +6,13 @@ import { useDispatch } from 'react-redux';
 import { setAuthUser } from '../../features/user/userSlice';
 
 
+
 function Login() {
   const navigate = useNavigate()
 
   const dispatch = useDispatch()
+
+
 
   const [user, setUser] = useState({
     identifier: "",
@@ -24,21 +27,24 @@ function Login() {
     }));
   };
 
+  // get authUser from store
+ 
+  
   const onSubmitHandler = async (e) => {
     e.preventDefault()
-    console.log(user)
-    
     try {
       const res = await axios.post("http://localhost:8080/api/v1/users/login", user, {
         headers: {
           "Content-Type": "application/json"
         },
         withCredentials: true
-      })
+      });
+
       if (res.data.success) {
         navigate("/")
         toast.success(res.data.message)
-        dispatch(setAuthUser(res.data))
+        dispatch(setAuthUser(res.data.data))
+        console.log("2. Dispatch executed");
         console.log(res.data)
       }
 

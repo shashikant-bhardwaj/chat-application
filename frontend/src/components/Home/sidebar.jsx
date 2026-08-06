@@ -4,11 +4,17 @@ import OtherUsers from "./otherUsers";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+// import { useSelector } from "react-redux";
 
 
-function Sidebar({ setSelectedUser }) {
+function Sidebar({ selectedUser, setSelectedUser }) {
 
    const navigate = useNavigate()
+  //  const selector = useSelector()
+
+   //get authUser from store
+
+   
 
   const logoutHandler = async() => {
     try {
@@ -48,7 +54,9 @@ function Sidebar({ setSelectedUser }) {
       </div>
 
       {/* Users */}
-      <OtherUsers setSelectedUser={setSelectedUser} />
+      <OtherUsers setSelectedUser={setSelectedUser}
+                  selectedUser={selectedUser}
+    />
 
     
 {/* Logged In User + Logout */}

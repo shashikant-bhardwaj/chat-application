@@ -171,7 +171,7 @@ const logout = asyncHandler(async (req, res) => {
             new ApiResponse(
                 200,
                 {},
-                "user logged out successfully"
+                "logged out successfully"
             )
         )
 

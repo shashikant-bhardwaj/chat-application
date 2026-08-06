@@ -9,6 +9,7 @@ import Home from './components/Home/Home.jsx'
 import {Toaster} from "react-hot-toast"
 import { Provider } from "react-redux"
 import { store } from './app/store.js'
+import Sidebar from './components/Home/sidebar.jsx'
 
 const router = createBrowserRouter(
   [
