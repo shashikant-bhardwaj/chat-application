@@ -4,19 +4,29 @@ import OtherUsers from "./otherUsers";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-// import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 
 function Sidebar() {
 
-   const navigate = useNavigate()
-  //  const selector = useSelector()
 
-   //get authUser from store
 
-   
+  //get authUser from store
+  const navigate = useNavigate()
+  const { authUser } = useSelector(store => store.user)
+  if(!authUser){
+    return(
+         <div className="h-full flex items-center justify-center bg-white/5">
+        <span className="text-white text-sm">Loading...</span>
+      </div>
+    )
+  }
 
-  const logoutHandler = async() => {
+
+
+
+  const logoutHandler = async () => {
     try {
       axios.defaults.withCredentials = true;
       const res = await axios.post("http://localhost:8080/api/v1/users/logout")
@@ -54,45 +64,47 @@ function Sidebar() {
       </div>
 
       {/* Users */}
-      <OtherUsers/>
+      <OtherUsers />
 
-    
-{/* Logged In User + Logout */}
-<div className="border-t border-gray-700 p-3 sm:p-4">
 
-  <div className="flex items-center justify-between gap-3">
+      {/* Logged In User + Logout */}
+      <div className="border-t border-gray-700 p-3 sm:p-4">
 
-    {/* Logged In User */}
-    <div className="flex items-center gap-3 min-w-0">
+        <div className="flex items-center justify-between gap-3">
 
-      <img
-        src="https://avatar.iran.liara.run/public/boy"
-        alt="profile"
-        className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover"
-      />
+          {/* Logged In User */}
+          <Link to= "/profile-photo">
+          <div className="flex items-center gap-3 min-w-0">
 
-      <div className="min-w-0">
-        <h3 className="text-white font-semibold text-sm sm:text-base truncate">
-          Shashikant
-        </h3>
+            <img
+              src={authUser?.profilePhoto}
+              alt="profile"
+              className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover"
+            />
 
-        <p className="text-green-400 text-xs sm:text-sm">
-          Online
-        </p>
+            <div className="min-w-0">
+              <h3 className="text-white font-semibold text-sm sm:text-base truncate">
+                Shashikant
+              </h3>
+
+              <p className="text-green-400 text-xs sm:text-sm">
+                Online
+              </p>
+            </div>
+
+          </div>
+          </Link>
+
+          {/* Logout Button */}
+          <button onClick={logoutHandler}
+            className="bg-red-600 hover:bg-red-700 px-3 sm:px-4 py-2 rounded-lg text-white text-sm font-medium transition"
+          >
+            Logout
+          </button>
+
+        </div>
+
       </div>
-
-    </div>
-
-    {/* Logout Button */}
-    <button onClick={logoutHandler}
-      className="bg-red-600 hover:bg-red-700 px-3 sm:px-4 py-2 rounded-lg text-white text-sm font-medium transition"
-    >
-      Logout
-    </button>
-
-  </div>
-
-</div>
 
 
 

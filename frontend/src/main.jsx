@@ -10,6 +10,7 @@ import {Toaster} from "react-hot-toast"
 import { Provider } from "react-redux"
 import { store } from './app/store.js'
 import Sidebar from './components/Home/sidebar.jsx'
+import ProfilePage from "./components/Home/ProfilePage.jsx"
 
 const router = createBrowserRouter(
   [
@@ -25,6 +26,11 @@ const router = createBrowserRouter(
       path: "/login",
       element: <Login/>
     },
+    {
+      path: "/profile-photo",
+      element: <ProfilePage/>
+    },
+    
   ])
 
 createRoot(document.getElementById('root')).render(

@@ -4,6 +4,7 @@ import MessageContainer from "./MessageContainer";
 import axios from "axios"
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { setAuthUser } from "../../features/user/userSlice";
 
 function Home() {
   // const [selectedUser, setSelectedUser] = useState(null);
@@ -12,9 +13,16 @@ function Home() {
 
   useEffect( () => {
     const getCurrentUser = async() => {
-      const res = await axios.post
+     try {
+         axios.defaults.withCredentials = true;
+      const res = await axios.get("http://localhost:8080/api/v1/users/current-user")
+      dispatch(setAuthUser(res.data.data))
+     } catch (error) {
+      console.log(error)
+     }
     }
-  }, [dispatch])
+    getCurrentUser()
+  }, [ Home])
 
   return (
     <div className="h-screen p-2 sm:p-4">

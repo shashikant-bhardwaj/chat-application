@@ -191,6 +191,21 @@ const getOtherUsers = asyncHandler(async (req, res) => {
         )
 })
 
+const getCurrentUser = asyncHandler(async(req, res) => {
+    const user = await User.findById(req.user?._id)
+    if(!user) return
+
+    res
+    .status(200)
+    .json(
+        new ApiResponse(
+            200,
+            user,
+            "got current user successfully"
+        )
+    )
+})
+
 
 
 
@@ -216,7 +231,8 @@ export {
     userRegister,
     login,
     logout,
-    getOtherUsers
+    getOtherUsers,
+    getCurrentUser
 }
 
 

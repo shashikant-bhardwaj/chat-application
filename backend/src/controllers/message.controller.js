@@ -9,7 +9,7 @@ import { ApiError } from "../utils/ApiError.js"
 
 const sendMessage = asyncHandler(async (req, res) => {
     const senderId = req.user?._id
-    const receiverId = req.params._id
+    const receiverId = req.params
     const {message} = req.body
   
 
@@ -105,7 +105,14 @@ const getMessage = asyncHandler(async(req, res) => {
     
     const conversation = await Conversation.findOne({
         participants: {$all: [senderId, receiverId]}
-    }).populate("messages")
+    }).populate({
+        path: "messages",
+        match: {
+            deletedFor: {
+                $ne: senderId
+            }
+        }
+    })
 
     if(!conversation){
         throw new ApiError(404, "conversation of participants doesn't exist")
@@ -155,7 +162,37 @@ const markMessageAsSeen = asyncHandler(async(req, res) => {
     )
 })
 
+// delete for me
+const deleteForMe = asyncHandler(async (req, res) => {
+    const userId = req.user._id;
+    const messageId = req.params._id;
 
+    // Find message
+    const message = await Message.findById(messageId);
+
+    if (!message) {
+        throw new ApiError(404, "Message not found");
+    }
+
+    // Check if already deleted for this user
+    const alreadyDeleted = message.deletedFor.some((id) =>
+        id.equals(userId)
+    );
+
+    // If not deleted, add user id
+    if (!alreadyDeleted) {
+        message.deletedFor.push(userId);
+        await message.save();
+    }
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            message,
+            "Message deleted for you"
+        )
+    );
+});
 
 
 
@@ -174,6 +211,7 @@ const markMessageAsSeen = asyncHandler(async(req, res) => {
 export {
     sendMessage,
     getMessage,
-    markMessageAsSeen
+    markMessageAsSeen,
+    deleteForMe
 
 }

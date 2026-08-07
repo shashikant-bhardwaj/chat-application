@@ -27,9 +27,9 @@ app.use("/api/v1/messages", messageRouter)
 
 
 app.use((err, req, res, next) => {
-    res.status(err.statusCode).json({
+    res.status(err.statusCode || 500).json({
         success: false,
-        message: err.message
+        message: err.message || "internal server error"
     });
 });
 

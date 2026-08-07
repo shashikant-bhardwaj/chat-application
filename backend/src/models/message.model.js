@@ -14,6 +14,10 @@ const messageSchema = new Schema(
         type: String,
         required: true
       },
+      deletedFor: [ {
+        type: Schema.Types.ObjectId,
+        ref: "User"
+      } ] ,
       isSeen: {
         type: Boolean,
         default: false
