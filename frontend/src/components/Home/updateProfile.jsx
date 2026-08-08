@@ -1,10 +1,11 @@
 import React, { useRef, useState } from "react";
 import { FaEdit } from "react-icons/fa";
-import axios from "axios";
-import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 
-function updatedProfile({ setSelectedProfilePage }) {
+import UseUploadProfile from "../../hooks/uploadProfile/useUploadProfile";
+
+function updateProfile({ setSelectedProfilePage }) {
+  const {uploadProfile} = UseUploadProfile()
   const {authUser} = useSelector(store => store.user)
   const fileRef = useRef(null);
 
@@ -22,26 +23,6 @@ function updatedProfile({ setSelectedProfilePage }) {
     setPreview(URL.createObjectURL(selected));
   };
 
-  const uploadPhoto = async () => {
-    if (!file) return toast.error("Select a photo");
-
-    try {
-      const formData = new FormData();
-      formData.append("profilePhoto", file);
-
-      axios.defaults.withCredentials = true;
-
-      await axios.patch(
-        "http://localhost:8080/api/v1/users/update-profile-photo",
-        formData
-      );
-
-      toast.success("Profile photo updated");
-      onClose();
-    } catch (error) {
-      toast.error("Upload failed");
-    }
-  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
@@ -64,7 +45,7 @@ function updatedProfile({ setSelectedProfilePage }) {
         <div className="relative mx-auto w-fit">
 
           <img
-            src={preview}
+            src={authUser?.profilePhoto}
             alt="Profile"
             className="h-28 w-28 rounded-full border-4 border-gray-700 object-cover md:h-36 md:w-36 lg:h-40 lg:w-40"
           />
@@ -110,7 +91,11 @@ function updatedProfile({ setSelectedProfilePage }) {
 
         {/* Upload Button */}
         <button
-          onClick={uploadPhoto}
+          onClick={() => {
+            console.log("clicked")
+            uploadProfile(file);
+            setSelectedProfilePage(false)
+          }}
           className="mt-6 w-full rounded-lg bg-blue-600 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 md:text-base"
         >
           Upload Photo
@@ -121,4 +106,4 @@ function updatedProfile({ setSelectedProfilePage }) {
   );
 }
 
-export default updatedProfile;
+export default updateProfile;

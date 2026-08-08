@@ -3,9 +3,11 @@ import OtherUser from "./otherUser";
 import { useSelector } from "react-redux";
 import useGetOtherUsers from "../../hooks/getOtherUsers/useGetOtherUsers";
 
+
 function OtherUsers() {
 
   useGetOtherUsers();
+   
 
   const { otherUsers } = useSelector((store) => store.user);
 
@@ -13,7 +15,7 @@ function OtherUsers() {
 
   return (
      <div className="flex-1 overflow-y-auto hide-scrollbar">
-      {otherUsers.map((user) => (
+      { otherUsers.map((user) => (
         <OtherUser
           key={user._id}
           user={user}

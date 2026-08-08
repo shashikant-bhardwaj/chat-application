@@ -8,13 +8,18 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import LoggedInProfile from "./loggedInProfile";
+import Searchbar from "./searchbar";
+import { setSelectedUser } from '../../features/user/userSlice.js'
+import { useDispatch } from "react-redux";
 
 
 
 function Sidebar() {
 
 
-
+    const [searchedUser, setSearchedUser] = useState("")
+    const dispatch = useDispatch()
+    const {selectedUser} = useSelector(store => store.user)
   //get authUser from store
   const navigate = useNavigate()
   const { authUser } = useSelector(store => store.user)
@@ -25,6 +30,12 @@ function Sidebar() {
       </div>
     )
   }
+
+  // if(!authUser){
+  //   navigate("/login")
+
+  //   return null
+  // }
 
 
 
@@ -52,22 +63,52 @@ function Sidebar() {
     <div className="h-full flex flex-col bg-white/5">
 
       {/* Header */}
-      <div className=" p-4 border-b border-gray-700">
+      
+      <Searchbar setSearchedUser={setSearchedUser}/>
 
-        <h1 className="text-2xl font-bold text-white">
-          Chats
-        </h1>
+      {/* Searched User */}
+      {searchedUser && (
+        <div          onClick={() => {
+          dispatch(setSelectedUser(searchedUser))
+          setSearchedUser("")}}
+                    className={`
+          flex items-center gap-3 p-4 cursor-pointer rounded-lg
+          transition-all duration-10
+          ${
+            selectedUser?._id === searchedUser._id
+              ? "bg-blue-500/20 shadow-lg shadow-blue-500/40 border border-blue-400"
+              : "hover:bg-white/10"
+          }
+        `}>
 
-        <input
-          type="text"
-          placeholder="Search..."
-          className="relative mt-4 w-full rounded-lg bg-white/10 border border-gray-600 px-4 py-2 text-white outline-none"
-        />
+          <div
+            className="flex items-center gap-3 p-3 rounded-lg 
+                       bg-white/10 cursor-pointer hover:bg-white/20"
+          >
 
-      </div>
+            <img
+              src={searchedUser.profilePhoto}
+              alt={searchedUser.fullName}
+              className="w-10 h-10 rounded-full object-cover"
+            />
 
-      {/* Users */}
-      <OtherUsers />
+            <div>
+              <p className="text-white font-medium">
+                {searchedUser.fullName}
+              </p>
+
+              <p className="text-gray-400 text-sm">
+                @{searchedUser.username}
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+      )}
+
+       {/* All Users */}
+      {!searchedUser && <OtherUsers />}
 
 
       {/* Logged In User + Logout */}

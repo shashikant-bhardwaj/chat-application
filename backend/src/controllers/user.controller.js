@@ -3,6 +3,7 @@ import { ApiError } from "../utils/ApiError.js"
 import { User } from "../models/user.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js"
 import mongoose from "mongoose";
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
 const generateAccessAndRefreshToken = async (userId) => {
     try {
         const user = await User.findById(userId)
@@ -206,6 +207,49 @@ const getCurrentUser = asyncHandler(async(req, res) => {
     )
 })
 
+// upload profile  photo
+const uploadProfilePhoto = asyncHandler(async (req, res) => {
+
+    const profileLocalFilePath = req.file?.path;
+
+    if (!profileLocalFilePath) {
+        throw new ApiError(400, "Profile photo is required");
+    }
+
+    // Upload image to Cloudinary
+    const profilePhoto = await uploadOnCloudinary(profileLocalFilePath);
+
+    if (!profilePhoto?.url) {
+        throw new ApiError(500, "Failed to upload profile photo");
+    }
+
+    // Save Cloudinary URL in database
+    const updatedUser = await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $set: {
+                profilePhoto: profilePhoto.url
+            }
+        },
+        {
+            new: true
+        }
+    ).select("-password -refreshToken");
+
+    if (!updatedUser) {
+        throw new ApiError(404, "User not found");
+    }
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                updatedUser,
+                "Profile photo uploaded successfully"
+            )
+        );
+});
 
 
 
@@ -232,7 +276,8 @@ export {
     login,
     logout,
     getOtherUsers,
-    getCurrentUser
+    getCurrentUser,
+    uploadProfilePhoto
 }
 
 

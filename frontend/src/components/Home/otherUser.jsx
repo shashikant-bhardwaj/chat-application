@@ -1,16 +1,18 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { setSelectedUser } from '../../features/user/userSlice'
+import { setSelectedUser } from '../../features/user/userSlice.js'
 import { useSelector } from 'react-redux'
 
+
 function OtherUser({user}) {
+
     //  console.log(selectedUser)
      const dispatch = useDispatch()
     //  const selector = useSelector()
      const {selectedUser} = useSelector(store => store.user)
   
     return (
-
+        
           <div
             // key={user.id}
             onClick={() => dispatch(setSelectedUser(user))}

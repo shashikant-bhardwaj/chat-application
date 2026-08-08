@@ -13,6 +13,7 @@ function Messages() {
    useGetMessages()
    const dispatch = useDispatch()
    const {deleteForEveryone} = useDeleteForEveryone()
+   const {selectedUser} = useSelector(store => store.user)
    const {selectedMessage} = useSelector(store => store.message)
    const {authUser} = useSelector(store => store.user)
     const {deleteForMe} = UseDeleteForMe()
@@ -29,13 +30,39 @@ function Messages() {
    console.log("Messages component rendered");
    console.log(userMessages)
     return (
+      
       <div  className="flex-1 overflow-y-auto p-4 hide-scrollbar">
-      {userMessages.map( (message) => {
+        
+      {userMessages.length > 0 ?  userMessages.map( (message) => {
         return(
         <Message key={message?._id} message={message} onMessageClick={handleMessageClick} onMessageLongPress={handleMessageLongPress}/>
         )
 
-      })}
+      }) : <div className="flex-1 flex items-center justify-center p-6">
+  <div className="text-center bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl px-8 py-10 shadow-xl max-w-md">
+
+    <div className="text-5xl mb-4">
+      💬
+    </div>
+
+    <h2 className="text-2xl font-bold text-white mb-2">
+      Let's Start a Conversation
+    </h2>
+
+    <p className="text-gray-950 text-sm leading-relaxed">
+      No messages here yet. Say hello and start a new conversation with{" "}
+      <span className="text-blue-700 font-medium">
+        {selectedUser.fullName}
+      </span>
+      .
+    </p>
+
+    <div className="mt-5 text-sm text-gray-950">
+      Send your first message 👋
+    </div>
+
+  </div>
+</div> }
      
       
       {showMenu && (

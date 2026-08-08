@@ -14,6 +14,7 @@ function Home() {
   useEffect( () => {
     const getCurrentUser = async() => {
      try {
+        
          axios.defaults.withCredentials = true;
       const res = await axios.get("http://localhost:8080/api/v1/users/current-user")
       dispatch(setAuthUser(res.data.data))
@@ -22,7 +23,7 @@ function Home() {
      }
     }
     getCurrentUser()
-  }, [ Home])
+  },[dispatch] )
 
   return (
     <div className="h-screen p-2 sm:p-4">
@@ -37,6 +38,7 @@ function Home() {
           `}
         >
           <Sidebar
+          
             selectedUser={selectedUser}
            
           />
