@@ -47,8 +47,8 @@ const userRegister = asyncHandler(async (req, res) => {
         throw new ApiError(400, "user already exist with this username")
     }
 
-    const boyProfile = `https://avatarapi.runflare.run/public/boy?=${username}`
-    const girlProfile = `https://avatarapi.runflare.run/public/girl?=${username}`
+    const boyProfile = `https://avatarapi.runflare.run/public/boy?usearname=${username}`
+    const girlProfile = `https://avatarapi.runflare.run/public?usearname=${username}`
 
     const user = await User.create(
         {
