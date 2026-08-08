@@ -9,27 +9,29 @@ function useGetMessages() {
     const { selectedUser } = useSelector(store => store.user)
     const dispatch = useDispatch()
     useEffect(() => {
-        console.log("Effect started");
-        console.log("Selected User:", selectedUser._id);
+
         if (!selectedUser) return;
+        dispatch(setMessages([]));
+
         const getMessages = async () => {
-            console.log("API Calling");
             try {
                 axios.defaults.withCredentials = true;
                 const res = await axios.get(`http://localhost:8080/api/v1/messages/${selectedUser?._id}`)
-                console.log("Response:", res.data.data.messages);
+                 console.log("Response:", res.data.data); 
                 dispatch(setMessages(res.data.data.messages))
-                console.log("Dispatch done");
-
+             
             } catch (error) {
-                console.log(error.response);
-    console.log(error.response.data);
-    console.log(error.response.data.message);
+                if (error.response?.status === 404) {
+                    //conversation doesn't exist
+                    dispatch(setMessages([]))
+                    return;
+                }
+                console.log("failed to fetch messages")
             }
 
         }
         getMessages()
-    }, [selectedUser])
+    }, [dispatch, selectedUser])
 
 }
 

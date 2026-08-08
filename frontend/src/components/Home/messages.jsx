@@ -6,11 +6,13 @@ import SendInput from './sendInput';
 import { useDispatch } from 'react-redux';
 import { setSelectedMessage } from '../../features/message/messageSlice';
 import UseDeleteForMe from '../../hooks/deleteForMe/useDeleteForMe'
+import useDeleteForEveryone from '../../hooks/deleteForEveryone/useDeleteForEveryone';
 
 
 function Messages() {
    useGetMessages()
    const dispatch = useDispatch()
+   const {deleteForEveryone} = useDeleteForEveryone()
    const {selectedMessage} = useSelector(store => store.message)
    const {authUser} = useSelector(store => store.user)
     const {deleteForMe} = UseDeleteForMe()
@@ -24,8 +26,8 @@ function Messages() {
          setShowMenu(true)
    }
   const {userMessages} = useSelector( (store) => store.message)
-  //  console.log("Messages component rendered");
-  //  console.log(userMessages)
+   console.log("Messages component rendered");
+   console.log(userMessages)
     return (
       <div  className="flex-1 overflow-y-auto p-4 hide-scrollbar">
       {userMessages.map( (message) => {
@@ -58,20 +60,27 @@ function Messages() {
 >
 
   <button
-  onClick={deleteForMe}
+  onClick={() => {
+    deleteForMe();
+    setShowMenu(false)
+  }}
   className="w-full px-5 py-3 text-left text-white hover:bg-white/10 transition-colors duration-200"
 >
   Delete for me
 </button>
+{/* {setShowMenu(false)} */}
 
-{/* {selectedMessage?.senderId === authUser._id && (
+{selectedMessage?.senderId === authUser._id && (
   <button
-    onClick={deleteForEveryone}
+    onClick={() => {
+      deleteForEveryone();
+      setShowMenu(false)
+    }}
     className="w-full px-5 py-3 text-left text-red-400 hover:bg-red-500/10 transition-colors duration-200"
   >
-    Delete for everyone
+     Delete for everyone
   </button>
-)} */}
+)}
 
 <div className="h-px bg-white/10 mx-3" />
 

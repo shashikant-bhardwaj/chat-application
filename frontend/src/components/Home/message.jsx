@@ -3,7 +3,8 @@ import { useSelector } from 'react-redux'
 
 function Message({message, onMessageClick, onMessageLongPress}) {
   const {authUser , selectedUser} = useSelector(store => store.user)
- 
+ console.log(message)
+console.log("deletedForEveryone:", message.deletedForEveryone)
   
   const isSender = message.senderId ===  authUser._id
   const isReceiver = message.receiverId === selectedUser._id
@@ -30,9 +31,17 @@ function Message({message, onMessageClick, onMessageLongPress}) {
       onTouchEnd={handleTouchEnd}
         className={`rounded-xl p-3 w-fit ${
           isSender ? "bg-blue-600 text-white ml-auto" : "bg-gray-700 text-white"
-        }`}
+        } ${message.deletedForEveryone? "bg-gray-800" : ""}`}
       >
-        {message.message}
+        {message.deletedForEveryone ? (
+                    <div className="text-gray-300  italic">
+                        This message was deleted
+                    </div>
+                ) : (
+                    <div>
+                        {message.message}
+                    </div>
+                )}
       </div>
     </div>
   )

@@ -9,7 +9,7 @@ import { ApiError } from "../utils/ApiError.js"
 
 const sendMessage = asyncHandler(async (req, res) => {
     const senderId = req.user?._id
-    const receiverId = req.params
+    const receiverId = req.params?._id
     const {message} = req.body
   
 
@@ -71,19 +71,23 @@ const sendMessage = asyncHandler(async (req, res) => {
     const newMessage = await  Message.create({
         senderId,
         receiverId,
-        message: message?.trim()
+        message: message?.trim(),
+        deletedForEveryone: false
     })
 
     // add message to conversation
 
-    await Conversation.findByIdAndUpdate(
-        conversation._id,
-        {
-            $push: {
-                messages: newMessage._id
-            }
+ const updatedConversation = await Conversation.findByIdAndUpdate(
+    conversation._id,
+    {
+        $push: {
+            messages: newMessage._id
         }
-    )
+    },
+   
+);
+
+
 
     return res
     .status(200)
@@ -110,7 +114,8 @@ const getMessage = asyncHandler(async(req, res) => {
         match: {
             deletedFor: {
                 $ne: senderId
-            }
+            },
+            deletedForEveryone: false
         }
     })
 
@@ -194,6 +199,61 @@ const deleteForMe = asyncHandler(async (req, res) => {
     );
 });
 
+// deleted for everyone
+
+const deleteForEveryone = asyncHandler(async(req, res) => {
+    const messageId = req.params?._id
+    const senderId = req.user?._id
+    
+    // message id check
+
+    if(!messageId){
+        throw new ApiError(404, "messageId is required")
+    }
+    
+    //message find
+
+    const message = await Message.findById(messageId)
+
+    if(!message){
+        throw new ApiError(404, "message not founnd")
+    }
+
+    // check message current user ne hi send kiya h
+
+    if(message.senderId.toString() !== senderId.toString()){
+        throw new ApiError(403, "you can only delete your own message for everyone ")
+    }
+    
+    // mark message delete for everyone
+
+    const deleteMsg = await Message.findByIdAndUpdate(
+        messageId,
+        {
+            $set: {
+                deletedForEveryone: true
+            }
+        },
+        {
+            new: true
+        }
+    )
+    console.log("updated", deleteMsg)
+
+    await deleteMsg.save();
+
+   return res
+   .status(200)
+   .json(
+    new ApiResponse(
+        200,
+        deleteMsg,
+        "message deleted for everyone"
+    )
+   )
+
+})
+
 
 
 
@@ -212,6 +272,7 @@ export {
     sendMessage,
     getMessage,
     markMessageAsSeen,
-    deleteForMe
+    deleteForMe,
+    deleteForEveryone
 
 }

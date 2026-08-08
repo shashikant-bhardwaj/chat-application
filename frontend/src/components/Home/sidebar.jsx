@@ -6,6 +6,9 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import LoggedInProfile from "./loggedInProfile";
+
 
 
 function Sidebar() {
@@ -73,27 +76,11 @@ function Sidebar() {
         <div className="flex items-center justify-between gap-3">
 
           {/* Logged In User */}
-          <Link to= "/profile-photo">
-          <div className="flex items-center gap-3 min-w-0">
-
-            <img
-              src={authUser?.profilePhoto}
-              alt="profile"
-              className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover"
-            />
-
-            <div className="min-w-0">
-              <h3 className="text-white font-semibold text-sm sm:text-base truncate">
-                Shashikant
-              </h3>
-
-              <p className="text-green-400 text-xs sm:text-sm">
-                Online
-              </p>
-            </div>
-
-          </div>
-          </Link>
+           
+            <LoggedInProfile/>
+          
+         
+          
 
           {/* Logout Button */}
           <button onClick={logoutHandler}

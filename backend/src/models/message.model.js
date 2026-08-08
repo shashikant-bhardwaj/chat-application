@@ -18,6 +18,10 @@ const messageSchema = new Schema(
         type: Schema.Types.ObjectId,
         ref: "User"
       } ] ,
+      deletedForEveryone: {
+          type: Boolean,
+          default: false
+        },
       isSeen: {
         type: Boolean,
         default: false

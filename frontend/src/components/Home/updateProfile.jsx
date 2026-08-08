@@ -2,8 +2,10 @@ import React, { useRef, useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 
-function ProfileModal({ authUser, open, onClose }) {
+function updatedProfile({ setSelectedProfilePage }) {
+  const {authUser} = useSelector(store => store.user)
   const fileRef = useRef(null);
 
   const [preview, setPreview] = useState(authUser?.profilePhoto);
@@ -47,7 +49,7 @@ function ProfileModal({ authUser, open, onClose }) {
 
         {/* Close Button */}
         <button
-          onClick={onClose}
+          onClick={() => { setSelectedProfilePage(false)}}
           className="absolute right-4 top-4 text-xl text-white hover:text-red-500"
         >
           ✕
@@ -119,4 +121,4 @@ function ProfileModal({ authUser, open, onClose }) {
   );
 }
 
-export default ProfileModal;
+export default updatedProfile;
