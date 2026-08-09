@@ -11,10 +11,11 @@ import LoggedInProfile from "./loggedInProfile";
 import Searchbar from "./searchbar";
 import { setSelectedUser } from '../../features/user/userSlice.js'
 import { useDispatch } from "react-redux";
+import { useEffect } from "react";
 
 
 
-function Sidebar() {
+function Sidebar({loading}) {
 
 
     const [searchedUser, setSearchedUser] = useState("")
@@ -23,19 +24,27 @@ function Sidebar() {
   //get authUser from store
   const navigate = useNavigate()
   const { authUser } = useSelector(store => store.user)
-  if(!authUser){
+
+  useEffect(() => {
+    if (!loading && !authUser) {
+        navigate("/login");
+    }
+}, [loading, authUser, navigate]);
+
+  if(loading){
     return(
          <div className="h-full flex items-center justify-center bg-white/5">
         <span className="text-white text-sm">Loading...</span>
       </div>
     )
   }
+  
+  if(!authUser){
+    navigate("/login")
+    console.log("working")
 
-  // if(!authUser){
-  //   navigate("/login")
-
-  //   return null
-  // }
+    return null
+  }
 
 
 

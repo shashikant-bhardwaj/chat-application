@@ -7,23 +7,43 @@ import { useSelector } from "react-redux";
 import { setAuthUser } from "../../features/user/userSlice";
 
 function Home() {
+  const [loading, setLoading] = useState(true)
   // const [selectedUser, setSelectedUser] = useState(null);
   const {selectedUser} = useSelector(store => store.user)
   const dispatch = useDispatch();
 
-  useEffect( () => {
-    const getCurrentUser = async() => {
-     try {
-        
-         axios.defaults.withCredentials = true;
-      const res = await axios.get("http://localhost:8080/api/v1/users/current-user")
-      dispatch(setAuthUser(res.data.data))
-     } catch (error) {
-      console.log(error)
-     }
-    }
-    getCurrentUser()
-  },[dispatch] )
+useEffect(() => {
+
+    const getCurrentUser = async () => {
+        try {
+          console.log(loading)
+            const res = await axios.get(
+                "http://localhost:8080/api/v1/users/current-user",
+                {
+                    withCredentials: true
+                }
+            );
+
+            console.log("CURRENT USER:", res.data.data);
+
+            dispatch(setAuthUser(res.data.data));
+
+        } catch (error) {
+    
+            console.log("CURRENT USER ERROR:", error);
+            console.log("STATUS:", error.response?.status);
+            console.log("DATA:", error.response?.data);
+
+        }finally{
+          setLoading(false)
+          
+        }
+    };
+
+    getCurrentUser();
+
+}, [dispatch]);
+
 
   return (
     <div className="h-screen p-2 sm:p-4">
@@ -38,7 +58,7 @@ function Home() {
           `}
         >
           <Sidebar
-          
+            loading={loading}
             selectedUser={selectedUser}
            
           />

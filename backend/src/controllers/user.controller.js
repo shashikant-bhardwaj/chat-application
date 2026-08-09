@@ -20,7 +20,7 @@ const generateAccessAndRefreshToken = async (userId) => {
 }
 
 
-
+// register user
 
 const userRegister = asyncHandler(async (req, res) => {
     //get details from frontend
@@ -192,10 +192,15 @@ const getOtherUsers = asyncHandler(async (req, res) => {
         )
 })
 
-const getCurrentUser = asyncHandler(async(req, res) => {
-    const user = await User.findById(req.user?._id)
-    if(!user) return
 
+//get current user
+const getCurrentUser = asyncHandler(async(req, res) => {
+  const user = await User.findById(req.user?._id)
+        .select("-password -refreshToken");
+
+    if (!user) {
+        throw new ApiError(404, "User not found");
+    }
     res
     .status(200)
     .json(
