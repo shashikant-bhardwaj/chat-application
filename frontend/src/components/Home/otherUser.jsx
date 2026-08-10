@@ -4,51 +4,61 @@ import { setSelectedUser } from '../../features/user/userSlice.js'
 import { useSelector } from 'react-redux'
 
 
-function OtherUser({user}) {
+function OtherUser({ user }) {
 
-    //  console.log(selectedUser)
-     const dispatch = useDispatch()
-    //  const selector = useSelector()
-     const {selectedUser} = useSelector(store => store.user)
-  
-    return (
-        
-          <div
-            // key={user.id}
-            onClick={() => dispatch(setSelectedUser(user))}
-            className={`
+  const dispatch = useDispatch()
+  const { selectedUser, onlineUsers } = useSelector(store => store.user)
+
+
+  const isOnline = onlineUsers.includes(user._id)
+  console.log(isOnline)
+  console.log(onlineUsers[0])
+  console.log(user._id)
+
+  return (
+
+    <div
+      // key={user.id}
+      onClick={() => dispatch(setSelectedUser(user))}
+      className={`
   flex items-center gap-3 p-4 cursor-pointer rounded-lg
   transition-all duration-10
-  ${
-    selectedUser?._id === user._id
-      ? "bg-blue-500/20 shadow-lg shadow-blue-500/40 border border-blue-400"
-      : "hover:bg-white/10"
-  }
+  ${selectedUser?._id === user._id
+          ? "bg-blue-500/20 shadow-lg shadow-blue-500/40 border border-blue-400"
+          : "hover:bg-white/10"
+        }
 `}
-          >
+    >
 
-            <img
-              src={ user.profilePhoto}
-              alt=""
-              className="w-12 h-12 rounded-full"
-            />
+      <img
+        src={user.profilePhoto}
+        alt=""
+        className="w-12 h-12 rounded-full"
+      />
+         {isOnline && (
+        <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-gray-900"></span>
+    )}
 
-            <div>
+      <div>
 
-              <h2 className="text-white font-semibold">
-                {user.fullName}
-              </h2>
+        <h2 className="text-white font-semibold">
+          {user.fullName}
+        </h2>
 
-              <p className="text-sm text-gray-400">
-                {user.online ? "Online" : "Offline"}
-              </p>
+        <p
+          className={`text-sm ${isOnline ? "text-green-400" : "text-gray-400"
+            }`}
+        >
+          {isOnline ? "Online" : "Offline"}
+        </p>
 
-            </div>
+      </div>
 
-          </div>
+    </div>
 
-        
-    )
+
+  )
 }
 
 export default OtherUser
+

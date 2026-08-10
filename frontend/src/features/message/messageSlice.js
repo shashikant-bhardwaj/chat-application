@@ -12,11 +12,14 @@ const messageSlice = createSlice({
         setMessages: (state, action) => {
             state.userMessages = action.payload
         },
+        setAddMessages: (state, action) => {
+            state.userMessages.push(action.payload)
+        },
         setSelectedMessage: (state, action) => {
             state.selectedMessage = action.payload
         }
     }
 })
 
-export const { setMessages , setSelectedMessage} =  messageSlice.actions
+export const { setMessages , setSelectedMessage, setAddMessages} =  messageSlice.actions
 export default messageSlice.reducer

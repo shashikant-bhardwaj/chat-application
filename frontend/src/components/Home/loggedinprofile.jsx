@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import UpdatedProfile from './updateProfile'
+
 function LoggedInProfile() {
   const { authUser } = useSelector(store => store.user)
   const [selectedProfilePage, setSelectedProfilePage] = useState(false)
@@ -23,11 +24,11 @@ function LoggedInProfile() {
 
         <div className="min-w-0">
           <h3 className="text-white font-semibold text-sm sm:text-base truncate">
-            Shashikant
+            {authUser?.fullName}
           </h3>
 
           <p className="text-green-400 text-xs sm:text-sm">
-            Online
+            {"online"}
           </p>
         </div>
 

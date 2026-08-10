@@ -17,9 +17,9 @@ function useSendMessage(){
         if(!res) return;
         dispatch(setMessages([...userMessages, res.data.data]))
         
-        console.log(res)
+       
       } catch (error) {
-        console.log(error.data.res)
+        console.log(error.response.data)
       }finally{
         setloading(false)
       }

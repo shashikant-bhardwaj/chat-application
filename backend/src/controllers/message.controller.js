@@ -5,6 +5,7 @@ import { ApiResponse } from "../utils/ApiResponse.js"
 import { Message } from "../models/message.model.js"
 import { User } from "../models/user.model.js"
 import { ApiError } from "../utils/ApiError.js"
+import { getIO, getSocketId } from "../socket/socket.js"
 
 
 const sendMessage = asyncHandler(async (req, res) => {
@@ -72,8 +73,29 @@ const sendMessage = asyncHandler(async (req, res) => {
         senderId,
         receiverId,
         message: message?.trim(),
-        deletedForEveryone: false
+        deletedForEveryone: false,
+        isSeen: false
     })
+
+    //send real time message to the receiver through socket.io
+
+   const receiverSocketId = getSocketId(receiverId)
+
+console.log("RECEIVER ID:", receiverId)
+console.log("RECEIVER SOCKET ID:", receiverSocketId)
+
+if (receiverSocketId) {
+
+    console.log("Sending socket message to:", receiverSocketId)
+
+    getIO()
+        .to(receiverSocketId)
+        .emit("newMessage", newMessage)
+
+} else {
+
+    console.log("❌ Receiver is not online")
+}
 
     // add message to conversation
 
@@ -138,8 +160,8 @@ const getMessage = asyncHandler(async(req, res) => {
 // markMessageAsSeen
 
 const markMessageAsSeen = asyncHandler(async(req, res) => {
-    const senderId = req.params._id
-    const receiverId = req.user._id
+    const senderId = req.params?._id
+    const receiverId = req.user?._id
     console.log(senderId)
     console.log(receiverId)
 
@@ -153,8 +175,12 @@ const markMessageAsSeen = asyncHandler(async(req, res) => {
             $set: {
                 isSeen: true
             }
+        },
+        {
+            new: true
         }
     )
+    console.log("RESULT", result)
 
     return res
     .status(200)

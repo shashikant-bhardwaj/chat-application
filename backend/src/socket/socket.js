@@ -1,21 +1,59 @@
-// import {server} from "socket.io"
-// import http from "http"
-// import express from "express"
+import { Server } from "socket.io"
 
 
-// const app = express()
+let io;
+const userSocketMap = new Map()
 
-// const server = http.createServer(app)
-// const io = new server(server, {
-//     cors: {
-//         origin: process.env.FRONTEND_PORT,
-//         method: ["GET", "POST"]
-//     }
-// })
-// io.on("connection", (socket) => {
-//     console.log("user connected", socket.id)
-// })
+export const initializeSocket = (server) => {
 
-// export { app, server, io}
+     io = new Server(server, {
+        cors: {
+            origin: "http://localhost:5173",
+            credentials: true
+        }
+    })
+  
+
+    io.on("connection", (socket) => {
 
 
+        socket.on("addUser", (userId) => {
+              if (!userId) {
+              console.log("No userId received")
+             return
+           }
+
+            socket.userId =userId
+            userSocketMap.set(userId, socket.id)
+            
+            const onlineUsers = Array.from(userSocketMap.keys())
+            io.emit("getOnlineUsers", onlineUsers)
+            console.log("user connected:", socket.id)
+            console.log(userSocketMap)
+        })
+         console.log("user connected:", socket.id)
+         console.log(userSocketMap)
+
+        socket.on("disconnect", () => {
+            if(socket.userId){
+                userSocketMap.delete(socket.userId)
+                
+            }
+            console.log("user disconnected:", socket.id)
+             const onlineUsers = Array.from(userSocketMap.keys())
+            io.emit("getOnlineUsers", onlineUsers)
+        })
+
+    })
+
+    return io
+
+}
+
+export const getSocketId = (userId) => {
+    return userSocketMap.get(userId)
+}
+
+export const getIO = () => {
+    return io
+}

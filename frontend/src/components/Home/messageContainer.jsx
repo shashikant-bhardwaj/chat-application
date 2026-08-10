@@ -1,11 +1,22 @@
-import React from "react";
+import React, {useEffect} from "react";
 import SendInput from "./sendInput";
 import Messages from "./messages";
+import UseMessageMarkAsSeen from "../../hooks/markMessageAsSeen/useMessageMarkAsSeen";
 
 function MessageContainer({
   selectedUser,
   setSelectedUser,
 }) {
+  const { MarkAsSeen } = UseMessageMarkAsSeen()
+
+   
+    useEffect(() => {
+
+        if (!selectedUser?._id) return;
+
+        MarkAsSeen(selectedUser._id);
+
+    }, [selectedUser]);
 
   if (!selectedUser) {
     return (
