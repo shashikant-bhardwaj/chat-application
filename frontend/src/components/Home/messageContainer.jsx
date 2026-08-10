@@ -2,19 +2,27 @@ import React, {useEffect} from "react";
 import SendInput from "./sendInput";
 import Messages from "./messages";
 import UseMessageMarkAsSeen from "../../hooks/markMessageAsSeen/useMessageMarkAsSeen";
-
+import { useDispatch } from "react-redux";
+import { setSelectedUser } from "../../features/user/userSlice";
+import { useSelector } from "react-redux";
 function MessageContainer({
   selectedUser,
-  setSelectedUser,
+ 
 }) {
+  const dispatch = useDispatch()
   const { MarkAsSeen } = UseMessageMarkAsSeen()
+  const { onlineUsers} = useSelector(store => store.user)
+  const isOnline = onlineUsers.includes(selectedUser?._id)
+  console.log(isOnline)
 
    
     useEffect(() => {
 
         if (!selectedUser?._id) return;
+         console.log("SELECTED USER:", selectedUser);
+    console.log("SELECTED USER ID:", selectedUser._id);
 
-        MarkAsSeen(selectedUser._id);
+        MarkAsSeen(selectedUser?._id);
 
     }, [selectedUser]);
 
@@ -36,14 +44,14 @@ function MessageContainer({
         {/* Back Button */}
 
         <button
-          onClick={() => setSelectedUser(null)}
+          onClick={() => dispatch(setSelectedUser(null))}
           className="md:hidden text-white text-2xl"
         >
           ←
         </button>
 
         <img
-          src={selectedUser.profilePhoto}
+          src={selectedUser?.profilePhoto}
           alt=""
           className="w-12 h-12 rounded-full"
         />
@@ -51,11 +59,11 @@ function MessageContainer({
         <div>
 
           <h2 className="text-white font-semibold">
-            {selectedUser.fullName}
+            {selectedUser?.fullName}
           </h2>
 
           <p className="text-green-400 text-sm">
-            Online
+            {isOnline ? "Online" : "Ofline"}
           </p>
 
         </div>

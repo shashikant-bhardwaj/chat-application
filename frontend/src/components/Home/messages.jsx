@@ -36,7 +36,9 @@ function Messages() {
       {userMessages.length > 0 ?  userMessages.map( (message) => {
         return(
         <Message key={message?._id} message={message} onMessageClick={handleMessageClick} onMessageLongPress={handleMessageLongPress}/>
+        
         )
+        
 
       }) : <div className="flex-1 flex items-center justify-center p-6">
   <div className="text-center bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl px-8 py-10 shadow-xl max-w-md">

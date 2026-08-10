@@ -43,7 +43,7 @@ function OtherUser({ user }) {
         </h2>
 
         <p
-          className={`text-sm ${isOnline ? "text-green-400" : "text-gray-400"
+          className={`text-sm ${isOnline ? "text-green-400" : "text-gray-600"
             }`}
         >
           {isOnline ? "Online" : "Offline"}
@@ -55,6 +55,7 @@ function OtherUser({ user }) {
 
 
   )
+  
 }
 
 export default OtherUser

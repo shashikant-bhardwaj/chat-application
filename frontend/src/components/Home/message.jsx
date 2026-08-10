@@ -53,7 +53,14 @@ function Message({message, onMessageClick, onMessageLongPress}) {
           <span className="italic text-sm text-gray-300">This message was deleted</span>
         ) : (
           <span>{message.message}</span>
+          
         )}
+        {  <span className="text-xs opacity-70 ml-1">
+                    {new Date(message.createdAt).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit"
+                    })}
+                </span>}
 
         {/* Sirf apne bheje hue messages pe tick dikhana hai */}
         {isSender && !message.deletedForEveryone && (

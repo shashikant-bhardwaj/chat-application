@@ -79,7 +79,7 @@ function Sidebar({loading}) {
       {searchedUser && (
         <div          onClick={() => {
           dispatch(setSelectedUser(searchedUser))
-          setSearchedUser("")}}
+                   setSearchedUser("")}}
                     className={`
           flex items-center gap-3 p-4 cursor-pointer rounded-lg
           transition-all duration-10

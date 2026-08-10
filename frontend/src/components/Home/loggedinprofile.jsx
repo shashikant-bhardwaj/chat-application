@@ -3,8 +3,10 @@ import { useSelector } from 'react-redux'
 import UpdatedProfile from './updateProfile'
 
 function LoggedInProfile() {
-  const { authUser } = useSelector(store => store.user)
+  const { authUser, onlineUsers } = useSelector(store => store.user)
   const [selectedProfilePage, setSelectedProfilePage] = useState(false)
+  const isOnline = onlineUsers.includes(authUser?._id)
+  
   return (
     <>
       <div onClick={() => {
@@ -16,7 +18,7 @@ function LoggedInProfile() {
         <img
           src={authUser?.profilePhoto?.replace(
            "/image/upload/",
-    "/image/upload/f_jpg/"
+           "/image/upload/f_jpg/"
           )}
           alt="profile"
           className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover"
@@ -28,7 +30,7 @@ function LoggedInProfile() {
           </h3>
 
           <p className="text-green-400 text-xs sm:text-sm">
-            {"online"}
+            { isOnline ? "online" : ""}
           </p>
         </div>
 

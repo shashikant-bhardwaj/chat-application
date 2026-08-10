@@ -6,20 +6,27 @@ import { setMessages } from "../../features/message/messageSlice"
 
 function useSendMessage(){
   const dispatch = useDispatch()
-    const {selectedUser} = useSelector(store => store.user)
+    const {selectedUser, authUser} = useSelector(store => store.user)
     const {userMessages} = useSelector(store => store.message)
     const [loading, setloading] = useState(false);
     const send = async(message) => {
       try {
         setloading(true);
+             console.log("MESSAGE:", message);
+        console.log("AUTH USER:", authUser?._id);
+console.log("SELECTED USER:", selectedUser?._id);
           axios.defaults.withCredentials = true;
         const res = await axios.post(`http://localhost:8080/api/v1/messages/send/${selectedUser?._id}`, {message})
+           console.log("SEND RESPONSE:", res.data);
         if(!res) return;
         dispatch(setMessages([...userMessages, res.data.data]))
         
        
       } catch (error) {
-        console.log(error.response.data)
+     
+         console.log("SEND ERROR:", error);
+        console.log("STATUS:", error.response?.status);
+        console.log("ERROR RESPONSE:", error.response?.data);
       }finally{
         setloading(false)
       }

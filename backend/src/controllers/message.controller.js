@@ -12,6 +12,8 @@ const sendMessage = asyncHandler(async (req, res) => {
     const senderId = req.user?._id
     const receiverId = req.params?._id
     const {message} = req.body
+    console.log("SENDER:", req.user?._id);
+console.log("RECEIVER:", req.params?._id);
   
 
     //validate message 
@@ -162,33 +164,53 @@ const getMessage = asyncHandler(async(req, res) => {
 const markMessageAsSeen = asyncHandler(async(req, res) => {
     const senderId = req.params?._id
     const receiverId = req.user?._id
-    console.log(senderId)
-    console.log(receiverId)
+  
 
+    const messages = await Message.find({
+        senderId,
+        receiverId,
+        isSeen: false
+    }).select("_id");
+
+
+    const messageIds = messages.map( message => message._id);
+    console.log("senderId:", senderId);
+console.log("receiverId:", receiverId);
+console.log("messages:", messages);
+console.log("messageIds:", messageIds);
     const result = await Message.updateMany(
         {
-            senderId,
-            receiverId,
-            isSeen: false
+           _id: {$in: messageIds}
         },
         {
             $set: {
                 isSeen: true
             }
-        },
-        {
-            new: true
         }
     )
-    console.log("RESULT", result)
+    console.log("result",result)
+
+    const updatedMessages = await Message.find({
+        _id: {$in: messageIds}
+    })
+
+    const senderSocketId = getSocketId(senderId)
+    if(senderSocketId){
+         getIO()
+           .to(senderSocketId)
+           .emit("updatedMessages", updatedMessages)
+    }
+   
+
+    
+   
 
     return res
     .status(200)
     .json(
        new ApiResponse(
         200,
-        {modifiedCount: result.modifiedCount},
-        "message marked as seen"
+      updatedMessages
        )
     )
 })
