@@ -23,8 +23,6 @@ function UseUploadProfile() {
                 "http://localhost:8080/api/v1/users/upload-profile",
                 formData
             );
-
-            console.log("UPLOAD RESPONSE:", res.data);
             dispatch(setAuthUser(res.data.data));
 
         } catch (error) {

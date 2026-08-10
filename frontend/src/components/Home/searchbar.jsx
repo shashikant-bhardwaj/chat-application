@@ -1,38 +1,28 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
-function Searchbar({setSearchedUser}) {
+function Searchbar({ setSearchedUser }) {
   const [user, setUser] = useState("");
 
-  const {otherUsers} = useSelector(store => store.user )
+  const { otherUsers } = useSelector((store) => store.user);
 
-
-   const handleChange = (e) => {
+  const handleChange = (e) => {
     setUser(e.target.value);
   };
 
   const handleKeyDown = (e) => {
-    console.log("KEY PRESSED:", e.key);
-
     if (e.key === "Enter") {
-      
-      const result = otherUsers.find(
-    (item) =>
-    item.fullName
-      .trim()
-      .toLowerCase()
-      .includes(user.trim().toLowerCase())
-);
-        console.log(result)
-        setSearchedUser(result)
+      const result = otherUsers.find((item) =>
+        item.fullName.trim().toLowerCase().includes(user.trim().toLowerCase()),
+      );
+      console.log(result);
+      setSearchedUser(result);
     }
   };
 
   return (
     <div className="p-3">
-      <h1 className="text-2xl font-bold text-white">
-        Chats
-      </h1>
+      <h1 className="text-2xl font-bold text-white">Chats</h1>
 
       <input
         type="text"

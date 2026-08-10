@@ -12,9 +12,6 @@ function useSendMessage(){
     const send = async(message) => {
       try {
         setloading(true);
-             console.log("MESSAGE:", message);
-        console.log("AUTH USER:", authUser?._id);
-console.log("SELECTED USER:", selectedUser?._id);
           axios.defaults.withCredentials = true;
         const res = await axios.post(`http://localhost:8080/api/v1/messages/send/${selectedUser?._id}`, {message})
            console.log("SEND RESPONSE:", res.data);

@@ -12,7 +12,6 @@ function UseMessageMarkAsSeen() {
        try {
          axios.defaults.withCredentials = true;
          const res = await axios.patch(`http://localhost:8080/api/v1/messages/seen/${senderId}`)
-         console.log("Message Seen", res.data)
          
          return res.data
        } catch (error) {

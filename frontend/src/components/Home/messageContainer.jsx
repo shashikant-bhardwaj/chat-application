@@ -1,30 +1,22 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import SendInput from "./sendInput";
 import Messages from "./messages";
 import UseMessageMarkAsSeen from "../../hooks/markMessageAsSeen/useMessageMarkAsSeen";
 import { useDispatch } from "react-redux";
 import { setSelectedUser } from "../../features/user/userSlice";
 import { useSelector } from "react-redux";
-function MessageContainer({
-  selectedUser,
- 
-}) {
-  const dispatch = useDispatch()
-  const { MarkAsSeen } = UseMessageMarkAsSeen()
-  const { onlineUsers} = useSelector(store => store.user)
-  const isOnline = onlineUsers.includes(selectedUser?._id)
-  console.log(isOnline)
+function MessageContainer({ selectedUser }) {
+  const dispatch = useDispatch();
+  const { MarkAsSeen } = UseMessageMarkAsSeen();
+  const { onlineUsers } = useSelector((store) => store.user);
+  const isOnline = onlineUsers.includes(selectedUser?._id);
+  console.log(isOnline);
 
-   
-    useEffect(() => {
+  useEffect(() => {
+    if (!selectedUser?._id) return;
 
-        if (!selectedUser?._id) return;
-         console.log("SELECTED USER:", selectedUser);
-    console.log("SELECTED USER ID:", selectedUser._id);
-
-        MarkAsSeen(selectedUser?._id);
-
-    }, [selectedUser]);
+    MarkAsSeen(selectedUser?._id);
+  }, [selectedUser]);
 
   if (!selectedUser) {
     return (
@@ -36,11 +28,9 @@ function MessageContainer({
 
   return (
     <div className="flex flex-col h-full">
-
       {/* Header */}
 
       <div className="flex items-center gap-3 p-4 border-b border-gray-700">
-
         {/* Back Button */}
 
         <button
@@ -57,28 +47,21 @@ function MessageContainer({
         />
 
         <div>
-
-          <h2 className="text-white font-semibold">
-            {selectedUser?.fullName}
-          </h2>
+          <h2 className="text-white font-semibold">{selectedUser?.fullName}</h2>
 
           <p className="text-green-400 text-sm">
             {isOnline ? "Online" : "Ofline"}
           </p>
-
         </div>
-
       </div>
 
       {/* Messages */}
-      
-        <Messages/>
+
+      <Messages />
 
       {/* Input */}
-     
-      <SendInput/>
-     
 
+      <SendInput />
     </div>
   );
 }

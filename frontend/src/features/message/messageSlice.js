@@ -20,7 +20,7 @@ const messageSlice = createSlice({
         },
        setUpdatedMessages: (state, action) => {
 
-    state.userMessages = state.userMessages.map((message) => {
+            state.userMessages = state.userMessages.map((message) => {
 
         const updatedMessage = action.payload.find(
             (item) => item._id === message._id

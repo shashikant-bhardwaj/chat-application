@@ -19,7 +19,6 @@ function useDeleteForEveryone() {
                 `http://localhost:8080/api/v1/messages/delete-msg-everyone/${selectedMessage?._id}`
             );
 
-            console.log(res.data);
 
             // Message ko remove nahi karna,
             // sirf deletedForEveryone true karna

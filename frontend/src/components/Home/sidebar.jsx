@@ -9,57 +9,50 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import LoggedInProfile from "./loggedInProfile";
 import Searchbar from "./searchbar";
-import { setSelectedUser } from '../../features/user/userSlice.js'
+import { setSelectedUser } from "../../features/user/userSlice.js";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 
-
-
-function Sidebar({loading}) {
-
-
-    const [searchedUser, setSearchedUser] = useState("")
-    const dispatch = useDispatch()
-    const {selectedUser} = useSelector(store => store.user)
+function Sidebar({ loading }) {
+  const [searchedUser, setSearchedUser] = useState("");
+  const dispatch = useDispatch();
+  const { selectedUser } = useSelector((store) => store.user);
   //get authUser from store
-  const navigate = useNavigate()
-  const { authUser } = useSelector(store => store.user)
+  const navigate = useNavigate();
+  const { authUser } = useSelector((store) => store.user);
 
   useEffect(() => {
     if (!loading && !authUser) {
-        navigate("/login");
+      navigate("/login");
     }
-}, [loading, authUser, navigate]);
+  }, [loading, authUser, navigate]);
 
-  if(loading){
-    return(
-         <div className="h-full flex items-center justify-center bg-white/5">
+  if (loading) {
+    return (
+      <div className="h-full flex items-center justify-center bg-white/5">
         <span className="text-white text-sm">Loading...</span>
       </div>
-    )
-  }
-  
-  if(!authUser){
-    navigate("/login")
-    console.log("working")
-
-    return null
+    );
   }
 
+  if (!authUser) {
+    navigate("/login");
+    console.log("working");
 
-
+    return null;
+  }
 
   const logoutHandler = async () => {
     try {
       axios.defaults.withCredentials = true;
-      const res = await axios.post("http://localhost:8080/api/v1/users/logout")
-      navigate("/login")
-      toast.success(res.data.message)
-      console.log(res)
+      const res = await axios.post("http://localhost:8080/api/v1/users/logout");
+      navigate("/login");
+      toast.success(res.data.message);
+      console.log(res);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   //  const users = [
   //     { id: 1, name: "Ankit", online: true },
@@ -70,17 +63,18 @@ function Sidebar({loading}) {
 
   return (
     <div className="h-full flex flex-col bg-white/5">
-
       {/* Header */}
-      
-      <Searchbar setSearchedUser={setSearchedUser}/>
+
+      <Searchbar setSearchedUser={setSearchedUser} />
 
       {/* Searched User */}
       {searchedUser && (
-        <div          onClick={() => {
-          dispatch(setSelectedUser(searchedUser))
-                   setSearchedUser("")}}
-                    className={`
+        <div
+          onClick={() => {
+            dispatch(setSelectedUser(searchedUser));
+            setSearchedUser("");
+          }}
+          className={`
           flex items-center gap-3 p-4 cursor-pointer rounded-lg
           transition-all duration-10
           ${
@@ -88,13 +82,12 @@ function Sidebar({loading}) {
               ? "bg-blue-500/20 shadow-lg shadow-blue-500/40 border border-blue-400"
               : "hover:bg-white/10"
           }
-        `}>
-
+        `}
+        >
           <div
             className="flex items-center gap-3 p-3 rounded-lg 
                        bg-white/10 cursor-pointer hover:bg-white/20"
           >
-
             <img
               src={searchedUser.profilePhoto}
               alt={searchedUser.fullName}
@@ -102,60 +95,38 @@ function Sidebar({loading}) {
             />
 
             <div>
-              <p className="text-white font-medium">
-                {searchedUser.fullName}
-              </p>
+              <p className="text-white font-medium">{searchedUser.fullName}</p>
 
-              <p className="text-gray-400 text-sm">
-                @{searchedUser.username}
-              </p>
+              <p className="text-gray-400 text-sm">@{searchedUser.username}</p>
             </div>
-
           </div>
-
         </div>
       )}
 
-       {/* All Users */}
+      {/* All Users */}
       {!searchedUser && <OtherUsers />}
-
 
       {/* Logged In User + Logout */}
       <div className="border-t border-gray-700 p-3 sm:p-4">
-
         <div className="flex items-center justify-between gap-3">
-
           {/* Logged In User */}
-           
-            <LoggedInProfile/>
-          
-         
-          
+
+          <LoggedInProfile />
 
           {/* Logout Button */}
-          <button onClick={logoutHandler}
+          <button
+            onClick={logoutHandler}
             className="bg-red-600 hover:bg-red-700 px-3 sm:px-4 py-2 rounded-lg text-white text-sm font-medium transition"
           >
             Logout
           </button>
-
         </div>
-
       </div>
-
-
-
     </div>
   );
 }
 
 export default Sidebar;
-
-
-
-
-
-
 
 // <div className="flex-1 overflow-y-auto hide-scrollbar">
 

@@ -11,7 +11,7 @@ const dispatch = useDispatch()
         try {
             axios.defaults.withCredentials = true;
             const res = await axios.get("http://localhost:8080/api/v1/users/")
-            console.log(res.data)
+
 
             //store
             dispatch(setOtherUsers(res.data.data))
