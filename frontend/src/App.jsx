@@ -40,18 +40,13 @@ function App() {
     const socket = io("http://localhost:8080");
 
     socket.on("connect", () => {
-      console.log("Connected:", socket.id);
-
       socket.emit("addUser", authUser._id);
     });
     socket.on("getOnlineUsers", (onlineUsers) => {
-      console.log("ONLINE USERS:", onlineUsers);
       dispatch(setOnlineUsers(onlineUsers));
     });
     socket.on("newMessage", async (newMessage) => {
       if (newMessage?.senderId === selectedUser?._id) {
-        console.log("REAL TIME MESSAGE:", newMessage);
-
         // message UI mein add karo
         dispatch(setAddMessages(newMessage));
 
@@ -65,8 +60,6 @@ function App() {
               withCredentials: true,
             },
           );
-
-          console.log("New message immediately seen");
         } catch (error) {
           console.log(
             "MARK AS SEEN ERROR:",
@@ -79,9 +72,8 @@ function App() {
       dispatch(setUpdatedMessages(updatedMessages));
     });
     socket.on("deleteMsg", (deleteMsg) => {
-      console.log("DELETE EVENT RECEIVED:", deleteMsg);
-      dispatch(setDeletedMsg(deleteMsg))
-    })
+      dispatch(setDeletedMsg(deleteMsg));
+    });
 
     return () => {
       socket.disconnect();
