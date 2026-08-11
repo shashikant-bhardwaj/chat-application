@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import { setOnlineUsers } from "./features/user/userSlice.js";
 import {
   setAddMessages,
+  setDeletedMsg,
   setUpdatedMessages,
 } from "./features/message/messageSlice.js";
 import updateProfile from "./components/Home/updateProfile.jsx";
@@ -77,6 +78,10 @@ function App() {
     socket.on("updatedMessages", (updatedMessages) => {
       dispatch(setUpdatedMessages(updatedMessages));
     });
+    socket.on("deleteMsg", (deleteMsg) => {
+      console.log("DELETE EVENT RECEIVED:", deleteMsg);
+      dispatch(setDeletedMsg(deleteMsg))
+    })
 
     return () => {
       socket.disconnect();

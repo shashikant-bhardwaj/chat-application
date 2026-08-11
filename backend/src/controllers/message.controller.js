@@ -217,6 +217,9 @@ const deleteForEveryone = asyncHandler(async (req, res) => {
     );
   }
 
+  const receiverId = message?.receiverId?.toString()
+  console.log(receiverId)
+
   // mark message delete for everyone
 
   const deleteMsg = await Message.findByIdAndUpdate(
@@ -227,11 +230,19 @@ const deleteForEveryone = asyncHandler(async (req, res) => {
       },
     },
     {
-      new: true,
+      returnDocument: "after",
     },
   );
 
   await deleteMsg.save();
+
+  // socketio
+  const receiverSocketId = getSocketId(receiverId)
+  console.log("receiverId:", receiverId);
+console.log("receiverSocketId:", receiverSocketId);
+  if(receiverSocketId){
+    getIO().to(receiverSocketId).emit("deleteMsg", deleteMsg)
+  }
 
   return res
     .status(200)

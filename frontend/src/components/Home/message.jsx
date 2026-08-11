@@ -5,7 +5,7 @@ function Message({ message, onMessageClick, onMessageLongPress }) {
   const { authUser, selectedUser } = useSelector((store) => store.user);
   const { userMessages } = useSelector((store) => store.message);
 
-  const isSender = message.senderId === authUser._id;
+  const isSender = message?.senderId?.toString() === authUser?._id?.toString();
   const isReceiver = message.receiverId === selectedUser._id;
 
   let timer;
