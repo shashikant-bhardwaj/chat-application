@@ -97,7 +97,7 @@ const login = asyncHandler(async (req, res) => {
     $or: [{ username: identifier }, { email: identifier }],
   });
   if (!existedUser) {
-    throw new ApiError(400, "user doesn't exist");
+    throw new ApiError(400, "you are not registered yet");
   }
 
   const isPasswordValid = await existedUser.isPasswordCorrect(password);
